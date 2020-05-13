@@ -31,7 +31,10 @@ class TempWidget:
         try:
             temp_string_GPU = temp_GPU[temp_GPU.find('=') + 1: temp_GPU.find("'")]
             temp_float_GPU = float(temp_string_GPU)
-            temp_formatted_GPU = f'GPU {temp_string_GPU}°C'
+            if temp_string_GPU.find("'C") != -1:
+            	temp_formatted_GPU = f'GPU {temp_string_GPU}°C'
+            else:
+            	temp_formatted_GPU = f'GPU {temp_string_GPU}°F'
             self.messageMsg.config(text=temp_formatted_GPU)
             if temp_float_GPU < self.THRESHOLD:
                 self.messageMsg.config(fg='green')
@@ -42,11 +45,11 @@ class TempWidget:
             self.logger.error(f'The following error occured: {exc}')
 
 window = Tk()
-window.title('Main Window')
+window.title('Tempal - RPI temperature monitor')
 window.configure(bg='black')
 # Disables closing the window by standard means, such as ALT+F4 etc.
 # window.overrideredirect(True)
 w, h = window.winfo_screenwidth(), window.winfo_screenheight()
-window.geometry("%dx%d+0+0" % (150, 100))
+window.geometry("%dx%d+0+0" % (w // 3, h // 3))
 tempWidget = TempWidget(window)
 window.mainloop()
